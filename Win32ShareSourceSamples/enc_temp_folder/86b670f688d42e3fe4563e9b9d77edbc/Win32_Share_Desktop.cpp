@@ -14,7 +14,7 @@
 #include <winstring.h>
 #include <wrl.h>
 #include <WinBase.h>
-#include "inc\Vector.h"
+
 
 using namespace std;
 using namespace Platform;
@@ -42,9 +42,6 @@ Microsoft::WRL::ComPtr<IDataTransferManagerInterop> pDTM;
 Microsoft::WRL::ComPtr<IStorageFile> pSTF;
 Microsoft::WRL::ComPtr<IDataTransferManagerStatics> dtmStatics;
 ComPtr<ABI::Windows::Storage::Streams::IRandomAccessStreamReference> streamRef;
-
-ComPtr<IStorageItem> storageItem;
-//ComPtr<collections::Vector<ABI::Windows::Storage::IStorageItem*>> imageItems;
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -208,7 +205,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 			   __debugbreak();
 
 		   hr = pStreamRefStatic->CreateFromFile(file.Get(), &streamRef);
-		   hr = file.As(&storageItem);
+
 	   }
 	   pInOutResult->hr = hr;
 	   SetEvent(pInOutResult->hCompleteEvent);
@@ -219,8 +216,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    async->put_Completed(handler.Get());
  //  WaitForSingleObject(pInOutResult->hCompleteEvent, INFINITE);
    CloseHandle(pInOutResult->hCompleteEvent);
-  //ComPtr<ABI::Windows::Foundation::Collections::__FIIterable_1_Windows__CStorage__CIStorageItem_t> pCollectionStrVe;
-   
+
 
 
    auto callback = Callback < ITypedEventHandler<DataTransferManager*, DataRequestedEventArgs* >> (
@@ -244,22 +240,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	   spDataPacakgeProperties->put_Thumbnail(streamRef.Get());
 	   spDataPackage->SetBitmap(streamRef.Get());
-	   
-
-	   ComPtr<ABI::Windows::Foundation::Collections::IVector<ABI::Windows::Storage::IStorageItem*>> imageItems;
-	   ComPtr<ABI::Windows::Foundation::Collections::IIterable<ABI::Windows::Storage::IStorageItem*>> imageIterator;
-	   ComPtr<ABI::Windows::Foundation::Collections::IVectorView<ABI::Windows::Storage::IStorageItem*>> imageItemsView;
-	   ComPtr<collections::Vector< ABI::Windows::Storage::IStorageItem*>> imageItemVector;
-	  /* const WCHAR* runtime_class_name = L"Windows.Foundation.Collections.IVector`1<Object>";
-	   hr = Windows::Foundation::GetActivationFactory(Microsoft::WRL::Wrappers::HStringReference(runtime_class_name).Get(), &imageItems);
-	   if (S_OK != hr)
-		   __debugbreak();*/
-	   imageItemVector = Make<collections::Vector< ABI::Windows::Storage::IStorageItem*>>();
-	   imageItemVector->Append(storageItem.Get());
-	   imageItemVector.As(&imageItems);
-	   imageItems->GetView(&imageItemsView);
-	   hr = imageItemsView.As(&imageIterator);
-	   spDataPackage->SetStorageItems( imageIterator.Get() , 0);
 	  
 	   return S_OK;
    });

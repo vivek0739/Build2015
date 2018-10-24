@@ -30,6 +30,12 @@
     <ClInclude Include="Win32_Share_Desktop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="collection_winrt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agile_wrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
